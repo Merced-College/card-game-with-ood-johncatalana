@@ -1,4 +1,9 @@
-package cardGame;
+// John Catalana
+// June 20, 2025
+// Card Game with OOD
+
+
+// package cardGame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,48 +12,51 @@ import java.util.Scanner;
 
 public class CardGame {
 
-	private static ArrayList<Card> deckOfCards = new ArrayList<Card>(); // Full card deck read from file (cards.txt)
-	private static ArrayList<Card> playerCards = new ArrayList<Card>(); // Player's Hand
+	private static ArrayList<Card> deckOfCards = new ArrayList<Card>(); // Stores the full deck of cards
+	private static ArrayList<Card> playerCards = new ArrayList<Card>(); // Stores the cards dealt to the player
 
 
 	public static void main(String[] args) {
 
 		Scanner input = null;
 		try {
-			input = new Scanner(new File("cards.txt")); //This opens the cards file
+			// opens the file containing card datqa
+			input = new Scanner(new File("cards.txt"));
 		} catch (FileNotFoundException e) {
-			// error : prints error if file isn't found
+			// error
 			System.out.println("error");
 			e.printStackTrace();
 		}
-		// 
+		// Read card data line by line and create card objects
 		while(input.hasNext()) {
 			String[] fields  = input.nextLine().split(",");
-			//	public Card(String cardSuit, String cardName, int cardValue, String cardPicture) {
+			// public Card(String cardSuit, String cardName, int cardValue, String cardPicture) {
 			Card newCard = new Card(fields[0], fields[1].trim(),
 					Integer.parseInt(fields[2].trim()), fields[3]);
-			deckOfCards.add(newCard); // this just adds the cards to the deck
+			deckOfCards.add(newCard); // Add card to the deck
 		}
 
-		shuffle(); // Shuffles the deck before dealing the cards
+		shuffle(); // Shuffles the deck before dealing
 
 		//for(Card c: deckOfCards)
-			//System.out.println(c); 
+			//System.out.println(c);
 
 		//deal the player 5 cards
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 5; i++) {
 			playerCards.add(deckOfCards.remove(i));
 		}
 		
+		// Check and display if the player has a pair (two cards with same value)
 		System.out.println("players cards");
 		for(Card c: playerCards)
-			System.out.println(c); // This just shows each card in the player's hand
+			System.out.println(c + " (Value: " + c.getValue() + ")");
 
-		System.out.println("pairs is " + checkFor2Kind()); // Checks for a pair
+		System.out.println("pairs is " + checkFor2Kind());
+		System.out.println("three of a kind is " + checkFor3Kind());
 
 	}//end main
 
-	
+
 	public static void shuffle() {
 
 		//shuffling the cards by deleting and reinserting
@@ -63,7 +71,7 @@ public class CardGame {
 	//check for 2 of a kind in the players hand
 	public static boolean checkFor2Kind() {
 
-		int count = 0;
+		int count = 0; // Loops through each pair of cards in the player's hand
 		for(int i = 0; i < playerCards.size() - 1; i++) {
 			Card current = playerCards.get(i);
 			Card next = playerCards.get(i+1);
@@ -72,13 +80,37 @@ public class CardGame {
 				next = playerCards.get(j);
 				//System.out.println(" comparing " + current);
 				//System.out.println(" to " + next);
-				if(current.equals(next))
-					count++;
+				// compares the value of two cards
+				if(current.getValue() == next.getValue()) {
+					count++; // found a pair
 			}//end of inner for
 			if(count == 1)
 				return true;
+		}
 
 		}//end outer for
 		return false;
+	}
+
+	//NEW METHOD: Checks if there are 3 cards of the same value
+	public static boolean checkFor3Kind() {
+		for (int i = 0; i < playerCards.size(); i++) {
+			Card current = playerCards.get(i);
+			int matchCount = 1; // Starting with 1 current card
+
+			for (int j = 0; j < playerCards.size(); j++) {
+				if (i != j) { // Dont compare the card to itelf
+					Card other = playerCards.get(j);
+					if (current.getValue() == other.getValue()) {
+						matchCount++;
+					}
+				}
+			}
+			// If we found exactly 3 cards with the same value, return true
+			if (matchCount == 3) {
+				return true;
+			}
+		}
+		return false; // No 3 of a kind
 	}
 }//end class
