@@ -7,33 +7,33 @@ import java.util.Scanner;
 
 public class CardGame {
 
-	private static ArrayList<Card> deckOfCards = new ArrayList<Card>();
-	private static ArrayList<Card> playerCards = new ArrayList<Card>();
+	private static ArrayList<Card> deckOfCards = new ArrayList<Card>(); // Full card deck read from file (cards.txt)
+	private static ArrayList<Card> playerCards = new ArrayList<Card>(); // Player's Hand
 
 
 	public static void main(String[] args) {
 
 		Scanner input = null;
 		try {
-			input = new Scanner(new File("cards.txt"));
+			input = new Scanner(new File("cards.txt")); //This opens the cards file
 		} catch (FileNotFoundException e) {
-			// error
+			// error : prints error if file isn't found
 			System.out.println("error");
 			e.printStackTrace();
 		}
-
+		// 
 		while(input.hasNext()) {
 			String[] fields  = input.nextLine().split(",");
 			//	public Card(String cardSuit, String cardName, int cardValue, String cardPicture) {
 			Card newCard = new Card(fields[0], fields[1].trim(),
 					Integer.parseInt(fields[2].trim()), fields[3]);
-			deckOfCards.add(newCard);	
+			deckOfCards.add(newCard); // this just adds the cards to the deck
 		}
 
-		shuffle();
+		shuffle(); // Shuffles the deck before dealing the cards
 
 		//for(Card c: deckOfCards)
-			//System.out.println(c);
+			//System.out.println(c); 
 
 		//deal the player 5 cards
 		for(int i = 0; i < 4; i++) {
@@ -42,12 +42,13 @@ public class CardGame {
 		
 		System.out.println("players cards");
 		for(Card c: playerCards)
-			System.out.println(c);
+			System.out.println(c); // This just shows each card in the player's hand
 
-		System.out.println("pairs is " + checkFor2Kind());
+		System.out.println("pairs is " + checkFor2Kind()); // Checks for a pair
 
 	}//end main
 
+	
 	public static void shuffle() {
 
 		//shuffling the cards by deleting and reinserting
