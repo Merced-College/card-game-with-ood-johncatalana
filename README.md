@@ -3,3 +3,6 @@
 
 John Catalana
 6/20/2025
+
+This java program simulates a simple card game using a standard deck of cards. As the instructions followed, I made a Card class to make the code work which includes constructores, accessors, mutators, and toString methods. 
+A feature that I added myself was to display the value next to each card in the output and also added a hasThreeOfKind() feature which uses nested loops to check if any value appears three times in a hand. This is similar to the checkFor2Kind().
